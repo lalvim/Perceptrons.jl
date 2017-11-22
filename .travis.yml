@@ -5,7 +5,6 @@ os:
   - osx
 julia:
   - 0.6
-  - nightly
 notifications:
   email: false
 git:
@@ -19,9 +18,9 @@ git:
 
 ## uncomment and modify the following lines to manually install system packages
 #addons:
-#  apt: # apt-get for linux
-#    packages:
-#    - gfortran
+  apt: # apt-get for linux
+    packages:
+    - hdf5-tools
 #before_script: # homebrew for mac
 #  - if [ $TRAVIS_OS_NAME = osx ]; then brew install gcc; fi
 

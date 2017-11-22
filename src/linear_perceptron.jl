@@ -67,15 +67,3 @@ function predict{T<:AbstractFloat}(model::LinearPerceptron{T},
    y
 
 end
-
-
-model = LinearPerceptron(1.0,Array{Float64}(1),true,42,5,0,Array{Integer}(1))
-
-X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
-Y = [1.0 ; 1.0; 1.0; 0.0]
-
-train(model,X,Y)
-print(model.history)
-predict(model,X)
-
-#plot([model.history], x=Row.index, y=Col.value, color=Col.index, Geom.line)
