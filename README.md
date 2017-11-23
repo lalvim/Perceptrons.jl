@@ -24,15 +24,14 @@ Examples
 
     using Perceptrons
 
-    # learning a single target
     X_train        = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
-    Y_train        = [1; 1; 1; 1.0]
+    Y_train        = [1; 1; 1; 0.0]
     X_test         = [.8 .9; .01 1; .9 0.2; 0.1 0.2]
 
     model          = Perceptrons.fit(X_train,Y_train)
-    Y_test         = Perceptrons.predict(model,X_test)
+    Y_pred         = Perceptrons.predict(model,X_test)
 
-    print("[Perceptron] mae error : $(mean(abs.(Y_test .- Y_pred)))")
+    print("[Perceptron] accuracy : $(acc(Y_train,Y_pred))")
 
     # if you want to save your model
     Perceptrons.save(model,filename="/tmp/perceptron_model.jld")
