@@ -3,7 +3,7 @@
            return  (Θ'*x >=0 ? 1.0: 0.0 )
 end
 
-function train{T<:AbstractFloat}(model::LinearPerceptron{T},
+function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
 	                              X::AbstractArray{T},
         								   Y::Vector{T})
 
@@ -52,7 +52,7 @@ function train{T<:AbstractFloat}(model::LinearPerceptron{T},
    model.history = history
 end
 
-function predict{T<:AbstractFloat}(model::LinearPerceptron{T},
+function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
 	                                    X::AbstractArray{T})
 
    Θ = model.Θ

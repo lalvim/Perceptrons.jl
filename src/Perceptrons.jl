@@ -26,11 +26,11 @@ function fit{T<:AbstractFloat}(X::AbstractArray{T},
                                copydata::Bool         = true,
                                centralize::Bool       = true,
                                kernel::String         = "linear",
-                               width::Real            = 1.0,
-                               alpha::Real            = 1.0e-2,
+                               width::AbstractFloat   = 1.0,
+                               alpha::AbstractFloat   = 1.0e-2,
                                shuffle_epoch::Bool    = true,
                                random_state::Int      = 42,
-                               max_epochs::Int        = 5
+                               max_epochs::Int        = 50
                                )
     X = X[:,:]
     check_constant_cols(X)
@@ -44,12 +44,12 @@ function fit{T<:AbstractFloat}(X::AbstractArray{T},
     Yi =  (copydata ? deepcopy(Y) : Y)
 
     model = LinearPerceptron(alpha,
-                             Array{Real}(1),
+                             Vector{T}(1),
                              shuffle_epoch,
                              random_state,
                              max_epochs,
                              0,
-                             Array{Integer}(1),
+                             Vector{Integer}(1),
                              mean(X,1),
                              std(X,1),
                              centralize,

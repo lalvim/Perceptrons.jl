@@ -21,7 +21,7 @@ end
 
 
 function check_params(kernel::AbstractString)
-    kernel == "rbf" || error("kernel must be kernel='linear' or 'kernel=rbf'")
+    kernel == "rbf" || kernel == "linear" || error("kernel must be kernel='linear' or kernel='rbf'")
 end
 
 ## checks constant columns

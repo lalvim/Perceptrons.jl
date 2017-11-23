@@ -1,3 +1,6 @@
+using Perceptrons
+
+
 
 @testset "Linear Perceptron Tests (in sample)" begin
 
@@ -7,10 +10,16 @@
         X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
         Y = [1.0 ; 1.0; 1.0; 0.0]
 
-        model = Perceptrons.fit(X,Y)
+        model = Perceptrons.fit(X,Y,centralize=false)
         pred  = Perceptrons.predict(model,X)
 
     	@test all(pred .== Y)
+
+        model = Perceptrons.fit(X,Y,centralize=true)
+        pred  = Perceptrons.predict(model,X)
+
+        @test all(pred .== Y)
+
     end
 
     @testset "AND function" begin
@@ -18,10 +27,16 @@
         X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
         Y = [1.0 ; 0.0; 0.0; 0.0]
 
-        model = Perceptrons.fit(X,Y)
-        pred  = Perceptrons.predict(X)
+        model = Perceptrons.fit(X,Y,centralize=false)
+        pred  = Perceptrons.predict(model,X)
 
-    	@test all(pred .== Y)
+        @test all(pred .== Y)
+
+        model = Perceptrons.fit(X,Y,centralize=true)
+        pred  = Perceptrons.predict(model,X)
+
+        @test all(pred .== Y)
+
     end
 
 end
@@ -35,10 +50,16 @@ end
         X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
         Y = [1.0 ; 1.0; 1.0; 0.0]
         Xt = X .+ .1
-        model = Perceptrons.fit(X,Y)
+        model = Perceptrons.fit(X,Y,centralize=false)
         pred  = Perceptrons.predict(model,Xt)
 
     	@test all(pred .== Y)
+
+        model = Perceptrons.fit(X,Y,centralize=true)
+        pred  = Perceptrons.predict(model,Xt)
+
+    	@test all(pred .== Y)
+
     end
 
     @testset "AND function" begin
@@ -47,10 +68,16 @@ end
         Y = [1.0 ; 0.0; 0.0; 0.0]
         Xt = X .+ .1
 
-        model = Perceptrons.fit(X,Y)
-        pred  = Perceptrons.predict(Xt)
+        model = Perceptrons.fit(X,Y,centralize=false)
+        pred  = Perceptrons.predict(model,Xt)
 
     	@test all(pred .== Y)
+
+        model = Perceptrons.fit(X,Y,centralize=true)
+        pred  = Perceptrons.predict(model,Xt)
+
+        @test all(pred .== Y)
+
     end
 
 end
