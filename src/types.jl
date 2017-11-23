@@ -48,9 +48,6 @@ mutable struct KernelPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
    X::AbstractArray{T}
    λ::Vector{T} # lagrange vector
    α::T
-   #Θ::Vector{T}
-   shuffle_epoch::Bool
-   random_state::Integer
    max_epochs::Integer
    last_epoch::Integer
    history::Vector{Integer}
@@ -66,9 +63,6 @@ end
 
 
 function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
-                          alpha,
-                          shuffle_epoch,
-                          random_state,
                           max_epochs,
                           centralize,
                           kernel,
@@ -76,10 +70,6 @@ function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
 
    return KernelPerceptron(X,
                            zeros(T,size(X,1)),
-                           alpha, # I will refactor to a constructor. Cleaner
-                           #rand(size(X,2)),
-                           shuffle_epoch,
-                           random_state,
                            max_epochs,
                            0,
                            Vector{Integer}(1),
@@ -114,9 +104,6 @@ function Model{T<:AbstractFloat}(X::AbstractArray{T},
                                  centralize)
       elseif kernel == "rbf"
          return KernelPerceptron(X,
-                                 alpha,
-                                 shuffle_epoch,
-                                 random_state,
                                  max_epochs,
                                  centralize,
                                  kernel,

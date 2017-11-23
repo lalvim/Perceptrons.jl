@@ -101,12 +101,13 @@ function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
 
    width        = model.width
    sv_x,sv_y,λ  = model.sv_x,model.sv_y,model.λ
+
    k   = size(sv_y,1)
    n   = size(X,1)
    y   = zeros(T,n)
    for i=1:n
       s = .0
-      for j=1:k
+      for j=1:k # can be vectorized in the future.
           s += λ[j] * sv_y[j] * Φ(X[i,:],sv_x[j,:],width)
       end
       y[i] = s
