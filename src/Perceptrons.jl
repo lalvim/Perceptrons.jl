@@ -5,6 +5,7 @@ using JLD
 include("utils.jl")
 include("types.jl")
 include("linear_perceptron.jl")
+include("kernel_perceptron.jl")
 
 
 
@@ -28,7 +29,6 @@ function fit{T<:AbstractFloat}(X::AbstractArray{T},
                                copydata::Bool         = true,
                                centralize::Bool       = true,
                                kernel::String         = "linear",
-                               width::AbstractFloat   = 1.0,
                                width::AbstractFloat   = 1.0,
                                alpha::AbstractFloat   = 1.0e-2,
                                shuffle_epoch::Bool    = true,

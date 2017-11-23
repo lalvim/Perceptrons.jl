@@ -1,4 +1,4 @@
-const KTOL 1.0e-5
+const KTOL = 1.0e-5
 
 # A gaussian kernel function
 @inline function Φ{T<:AbstractFloat}(x::Vector{T},
