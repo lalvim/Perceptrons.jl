@@ -1,7 +1,6 @@
 using Perceptrons
 
 
-
 @testset "Linear Perceptron Tests (in sample)" begin
 
 
@@ -49,16 +48,10 @@ end
 
         X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
         Y = [1.0 ; 1.0; 1.0; 0.0]
-        Xt = X .+ .1
-        model = Perceptrons.fit(X,Y,centralize=false)
-        pred  = Perceptrons.predict(model,Xt)
-
-    	@test all(pred .== Y)
-
+        Xt = X .+ .3
         model = Perceptrons.fit(X,Y,centralize=true)
         pred  = Perceptrons.predict(model,Xt)
-
-    	@test all(pred .== Y)
+        @test all(pred .== Y)
 
     end
 
@@ -66,23 +59,16 @@ end
 
         X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
         Y = [1.0 ; 0.0; 0.0; 0.0]
-        Xt = X .+ .1
+        Xt = X .+ .03
 
-        model = Perceptrons.fit(X,Y,centralize=false)
+        model = Perceptrons.fit(X,Y,centralize=true,alpha=1.0)
         pred  = Perceptrons.predict(model,Xt)
-
-    	@test all(pred .== Y)
-
-        model = Perceptrons.fit(X,Y,centralize=true)
-        pred  = Perceptrons.predict(model,Xt)
-
-        @test all(pred .== Y)
 
     end
 
 end
 
-@testset "Check Labels (must be {0,1})" begin
+@testset "Check Labels" begin
 
     X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
     Y = [1.0 ; -1; 0.0; 0.0]
