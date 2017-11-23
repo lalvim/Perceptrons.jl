@@ -96,7 +96,7 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
        push!(history,nerrors)
    end
    if nerrors > 0
-      warn("Kernel Perceptron: Not converged. Max epochs $(max_epochs) reached. Error history: $(history) \n Try to increase max_epochs or may be you have a non linear problem.")
+      warn("Kernel Perceptron: Not converged. Max epochs $(max_epochs) reached. Error history: $(history) \n Try to increase max_epochs or change kernel params.")
    end
    model.Θ = Θ
    model.λ = λ
