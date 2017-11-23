@@ -29,6 +29,7 @@ function fit{T<:AbstractFloat}(X::AbstractArray{T},
                                centralize::Bool       = true,
                                kernel::String         = "linear",
                                width::AbstractFloat   = 1.0,
+                               width::AbstractFloat   = 1.0,
                                alpha::AbstractFloat   = 1.0e-2,
                                shuffle_epoch::Bool    = true,
                                random_state::Int      = 42,
@@ -52,7 +53,8 @@ function fit{T<:AbstractFloat}(X::AbstractArray{T},
                   random_state,
                   max_epochs,
                   centralize,
-                  kernel)
+                  kernel,
+                  width)
 
     Xi =  (centralize ? centralize_data(Xi,model.mx,model.sx) : Xi)
     model.centralize  = (centralize ? true: false)

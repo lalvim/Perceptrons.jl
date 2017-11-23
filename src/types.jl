@@ -57,6 +57,7 @@ mutable struct KernelPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
    centralize::Bool
    nfeatures::Integer
    kernel::String
+   width::T
 end
 
 
@@ -66,7 +67,8 @@ function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
                           random_state,
                           max_epochs,
                           centralize,
-                          kernel)
+                          kernel,
+                          width)
 
    return KernelPerceptron(alpha, # I will refactor to a constructor. Cleaner
                            Vector{T}(1),
@@ -79,7 +81,8 @@ function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
                            std(X,1),
                            centralize,
                            size(X,2),
-                           kernel)
+                           kernel,
+                           width)
 
 end
 
@@ -91,7 +94,8 @@ function Model{T<:AbstractFloat}(X::AbstractArray{T},
                random_state,
                max_epochs,
                centralize,
-               kernel)
+               kernel,
+               width)
 
       if kernel == "linear"
          return LinearPerceptron(X,
@@ -107,7 +111,8 @@ function Model{T<:AbstractFloat}(X::AbstractArray{T},
                                  random_state,
                                  max_epochs,
                                  centralize,
-                                 kernel)
+                                 kernel,
+                                 width)
       else
          error("Invalid Kernel name: $(kernel)")
       end
