@@ -1,4 +1,3 @@
-# Perceptrons
 Perceptrons.jl
 ======
 
