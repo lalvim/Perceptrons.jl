@@ -116,19 +116,19 @@ end
 function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
 	                                    X::AbstractArray{T})
 
-   #Θ = model.Θ
-   #α = model.α
-   width = model.width
-   n,m = size(X)
+   width        = model.width
+   sv_x,sv_y,λ  = model.sv_x,model.sv_y,model.λ
+   k   = size(sv_y,1)
+   n   = size(X,1)
    y   = zeros(T,n)
    for i=1:n
-      s = 0
-      for j=1: a, sv_y, sv in zip(self.alpha, self.sv_y, self.sv)
-          s += a * sv_y * Φ(X[i,:], sv , width)
+      s = .0
+      for j=1:k
+          s += λ[j] * sv_y[j] * Φ(X[i,:],sv_x[j,:],width)
       end
-      y = s
+      y[i] = s
    end
 
-   return sign(y)
+   return sign.(y)
 
 end
