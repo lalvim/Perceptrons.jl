@@ -52,7 +52,7 @@ end
     return  (val >=0 ? 1.0: 0.0 )
 end
 
-function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
+function trainer{T<:AbstractFloat}(model::KernelPerceptron{T},
 	                              X::AbstractArray{T},
         						  Y::Vector{T})
 
@@ -96,7 +96,7 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
 
 end
 
-function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
+function predictor{T<:AbstractFloat}(model::KernelPerceptron{T},
 	                                    X::AbstractArray{T})
 
    width        = model.width
@@ -108,7 +108,7 @@ function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
    for i=1:n
       s = .0
       for j=1:k # can be vectorized in the future.
-          s += λ[j] * sv_y[j] * Φ(X[i,:],sv_x[j,:],width)
+          s += λ[j] * sv_y[j] * Φ(X[i,:],sv_x[j,:],width) # this is simply a weighted voting into a kernel space
       end
       y[i] = s
    end
