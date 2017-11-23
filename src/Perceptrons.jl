@@ -92,5 +92,6 @@ function predict{T<:AbstractFloat}(model::PerceptronModel{T},
     return Yi
 end
 
+dir(path...) = joinpath(dirname(dirname(@__FILE__)),path...)
 
 end
