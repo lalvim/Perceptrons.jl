@@ -60,6 +60,8 @@ mutable struct KernelPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
    nfeatures::Integer
    kernel::String
    width::T
+   sv_x::Vector{T}
+   sv_y::Vector{T}
 end
 
 
@@ -75,7 +77,7 @@ function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
    return KernelPerceptron(X,
                            zeros(T,size(X,1)),
                            alpha, # I will refactor to a constructor. Cleaner
-                           rand(size(X,2)+1),
+                           rand(size(X,2)),
                            shuffle_epoch,
                            random_state,
                            max_epochs,
@@ -86,7 +88,9 @@ function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
                            centralize,
                            size(X,2),
                            kernel,
-                           width)
+                           width,
+                           Vector{T}(1),
+                           Vector{T}(1))
 
 end
 

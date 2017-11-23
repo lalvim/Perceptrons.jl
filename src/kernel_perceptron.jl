@@ -1,3 +1,5 @@
+const KTOL 1.0e-5
+
 # A gaussian kernel function
 @inline function Φ{T<:AbstractFloat}(x::Vector{T},
                                      y::Vector{T},
@@ -65,11 +67,11 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
    K           = ΦΦ(X,model.width)
 
    n,m         = size(X)
-   X           = hcat(X,ones(n,1)) # adding bias
+   #X           = hcat(X,ones(n,1)) # adding bias
    history     = []
    nerrors,nlast_errors = Inf,0
    epochs      = 0
-   Θ           = model.Θ     #  already with bias
+   #Θ           = model.Θ     #  already with bias
    α           = model.α    #  learning rate
    λ           = model.λ    # langrange multipliers
    while  nerrors>0 && epochs < max_epochs
@@ -96,25 +98,37 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
        push!(history,nerrors)
    end
    if nerrors > 0
-      warn("Kernel Perceptron: Not converged. Max epochs $(max_epochs) reached. Error history: $(history) \n Try to increase max_epochs or change kernel params.")
+      warn("[Kernel Perceptron] Train not converged. Max epochs $(max_epochs) reached. Error history: $(history) \n Try to increase max_epochs or change kernel params.")
    end
-   model.Θ = Θ
-   model.λ = λ
+
+   # storing only the tough samples ("support vectors")
+   sv            = λ .> KTOL
+   model.λ       = λ[sv]
+   model.sv_x    = X[sv]
+   model.sv_y    = Y[sv]
    model.history = history
+
+   println("[Kernel perceptron] #$(len(self.alpha)) support vectors out of $(n) samples.")
+
+
 end
 
 function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
 	                                    X::AbstractArray{T})
 
-   Θ = model.Θ
-   α = model.α
-
+   #Θ = model.Θ
+   #α = model.α
+   width = model.width
    n,m = size(X)
-   y   = zeros(Real,n)
-   X   = hcat(X,ones(n,1)) # adding bias
+   y   = zeros(T,n)
    for i=1:n
-       y[i] = h(Θ,X[i,:])
+      s = 0
+      for j=1: a, sv_y, sv in zip(self.alpha, self.sv_y, self.sv)
+          s += a * sv_y * Φ(X[i,:], sv , width)
+      end
+      y = s
    end
-   y
+
+   return sign(y)
 
 end
