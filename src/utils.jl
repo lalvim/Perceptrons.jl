@@ -1,6 +1,11 @@
 
 
 ## Auxiliary functions
+export acc
+
+function acc(yt,yp)
+      count(x->x==true, yt .== yp)/length(yt)
+end
 
 ## checks PLS input data and params
 function check_data{T<:AbstractFloat}(X::Matrix{T},Y::Union{Vector{T},Matrix{T}})

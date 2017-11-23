@@ -1,5 +1,7 @@
 module Perceptrons
 
+using JLD
+
 include("utils.jl")
 include("types.jl")
 include("linear_perceptron.jl")
