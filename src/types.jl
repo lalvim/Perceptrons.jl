@@ -45,6 +45,8 @@ end
 
 #### Kernel Perceptron type
 mutable struct KernelPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
+   X::AbstractArray{T}
+   λ::Vector{T} # lagrange vector
    α::T
    Θ::Vector{T}
    shuffle_epoch::Bool
@@ -70,8 +72,10 @@ function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
                           kernel,
                           width)
 
-   return KernelPerceptron(alpha, # I will refactor to a constructor. Cleaner
-                           Vector{T}(1),
+   return KernelPerceptron(X,
+                           zeros(T,size(X,1)),
+                           alpha, # I will refactor to a constructor. Cleaner
+                           rand(size(X,2)+1),
                            shuffle_epoch,
                            random_state,
                            max_epochs,

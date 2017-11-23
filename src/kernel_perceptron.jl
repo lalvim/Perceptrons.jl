@@ -37,10 +37,16 @@ function ΦΦ{T<:AbstractFloat}(X::AbstractArray{T},
     K
 end
 
+@inline function ∑(λ,y,n)
+        sum = .0
+        for i=1:n
+            sum += λ[i]*y[i]
+        end
+        return sum
+end
 
-
-@inline function h(Θ,x)
-           return  (Θ'*x >=0 ? 1.0: 0.0 )
+@inline function sign(val)
+    return  (val >=0 ? 1.0: 0.0 )
 end
 
 function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
@@ -55,15 +61,16 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
       srand(random_state)
    end
 
-   K = ΦΦ(X,model.width)
+   K           = ΦΦ(X,model.width)
 
    n,m         = size(X)
    X           = hcat(X,ones(n,1)) # adding bias
    history     = []
    nerrors,nlast_errors = Inf,0
    epochs      = 0
-   Θ           = rand(m+1)   #  already with bias
-   α           = model.α   #  learning rate
+   Θ           = model.Θ     #  already with bias
+   α           = model.α    #  learning rate
+   λ           = model.λ    # langrange multipliers
    while  nerrors>0 && epochs < max_epochs
    # stops when error is equal to zero or grater than last_error or reached max iterations
        # shuffle dataset
@@ -75,11 +82,12 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
        nerrors = 0
        # weight updates for all samples
        for i=1:n
-          xi = x[i,:]
-          ξ   = h(Θ,xi) - y[i]
-          if ξ!=0
+          xi   = x[i,:]
+          yi   = y[i]
+          yp   = sign(∑(λ,y,n))
+          if yi!=yp
              nerrors+=1
-			    Θ = Θ - α * ξ * xi
+			 λ[i] += 1
           end
 		 end
        nlast_errors   = nerrors
@@ -87,10 +95,10 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
        push!(history,nerrors)
    end
    if nerrors > 0
-      warn("Perceptron: Not converged. Max epochs $(max_epochs) reached. Error history: $(history) \n Try to increase max_epochs or may be you have a non linear problem.")
+      warn("Kernel Perceptron: Not converged. Max epochs $(max_epochs) reached. Error history: $(history) \n Try to increase max_epochs or may be you have a non linear problem.")
    end
    model.Θ = Θ
-   model.α = α
+   model.λ = λ
    model.history = history
 end
 
