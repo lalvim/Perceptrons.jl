@@ -1,5 +1,6 @@
 
 
+
 @testset "Auxiliary Functions Test" begin
 
     @testset "check constant columns" begin
@@ -43,6 +44,15 @@
 		 try Perceptrons.check_data(Matrix{Float64}(0,0), 0) catch @test true end
 		 try Perceptrons.check_data(Matrix{Float64}(1,1), 10) catch @test true end
 		 @test Perceptrons.check_data(Matrix{Float64}(1,1), 1)
+
+	end
+
+	@testset "check binary labels" begin
+
+		try Perceptrons.check_linear_binary_labels([1,0,2]) catch @test true end
+		try Perceptrons.check_linear_binary_labels([1,-1]) catch @test true end
+
+		@test Perceptrons.check_linear_binary_labels([1,0])
 
 	end
 

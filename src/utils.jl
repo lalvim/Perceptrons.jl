@@ -34,3 +34,5 @@ centralize_data{T<:AbstractFloat}(D::Vector{T}, m::T, s::T)                   = 
 
 decentralize_data{T<:AbstractFloat}(D::AbstractArray{T}, m::AbstractArray{T}, s::AbstractArray{T}) = D .*s .+m
 decentralize_data{T<:AbstractFloat}(D::Vector{T}, m::T, s::T)                 = D *s +m
+
+check_linear_binary_labels{T<:Number}(Y::Vector{T}) = length(setdiff(Y,[0.,1.]))==0 || error("Your target values must be 1 and 0 only. You have $(unique(Y)) distinct labels")

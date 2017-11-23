@@ -43,7 +43,9 @@ function fit{T<:AbstractFloat}(X::AbstractArray{T},
     Xi =  (copydata ? deepcopy(X) : X)
     Yi =  (copydata ? deepcopy(Y) : Y)
 
-    model = LinearPerceptron(alpha,
+    # Future: condition for linear or non linear
+    check_linear_binary_labels(Yi)
+    model = LinearPerceptron(alpha, # I will refactor to a constructor. Cleaner
                              Vector{T}(1),
                              shuffle_epoch,
                              random_state,
