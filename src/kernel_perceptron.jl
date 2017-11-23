@@ -39,13 +39,13 @@ function ΦΦ{T<:AbstractFloat}(X::AbstractArray{T},
     K
 end
 
-@inline function ∑(λ,y,n,K,j)
+@inline function ∑(λ,y,n,K)
     #    sum = .0
     #    for i=1:n
     #        sum += λ[i]*y[i]*K[i,j]
     #    end
     #    return sum
-    return sum(λ .* y .* K[:,j])
+    return sum(λ .* y .* K)
 end
 
 @inline function sign(val)
@@ -87,7 +87,7 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
        for i=1:n
           xi   = x[i,:]
           yi   = y[i]
-          yp   = sign(∑(λ,y,n,K,i))
+          yp   = sign(∑(λ,y,n,K[:,i]))
           if yi!=yp
              nerrors+=1
 			 λ[i] += 1
