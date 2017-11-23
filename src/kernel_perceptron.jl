@@ -45,7 +45,7 @@ end
     #        sum += λ[i]*y[i]*K[i,j]
     #    end
     #    return sum
-    return sum(λ .* y .* K)
+    return sum(λ .* y .* K,1)
 end
 
 @inline function sign(val)
@@ -54,46 +54,29 @@ end
 
 function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
 	                              X::AbstractArray{T},
-        								   Y::Vector{T})
+        						  Y::Vector{T})
 
-   shuffle_epoch = model.shuffle_epoch
-   random_state  = model.random_state
-   max_epochs    = model.max_epochs
-
-   if random_state!=-1
-      srand(random_state)
-   end
-
-   K           = ΦΦ(X,model.width)
-
-   n,m         = size(X)
-   #X           = hcat(X,ones(n,1)) # adding bias
-   history     = []
-   nerrors,nlast_errors = Inf,0
-   epochs      = 0
-   #Θ           = model.Θ     #  already with bias
+   max_epochs  = model.max_epochs
    α           = model.α    #  learning rate
    λ           = model.λ    # langrange multipliers
+
+   K           = ΦΦ(X,model.width) # computing the kernel gram matrix
+
+   n,m         = size(X)
+   history     = []
+   nerrors     = Inf
+   epochs      = 0
    while  nerrors>0 && epochs < max_epochs
    # stops when error is equal to zero or grater than last_error or reached max iterations
-       # shuffle dataset
-       if shuffle_epoch
-          sind = shuffle(1:n)
-          x = X[sind,:]
-          y = Y[sind]
-       end
        nerrors = 0
        # weight updates for all samples
        for i=1:n
-          xi   = x[i,:]
-          yi   = y[i]
           yp   = sign(∑(λ,y,n,K[:,i]))
-          if yi!=yp
-             nerrors+=1
-			 λ[i] += 1
+          if y[i] != yp
+             nerrors +=1
+			 λ[i]    += 1    # missclassification counter for sample i
           end
 		 end
-       nlast_errors   = nerrors
        epochs+=1
        push!(history,nerrors)
    end
