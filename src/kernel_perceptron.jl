@@ -48,19 +48,17 @@ end
 end
 
 @inline function sign(val)
-    return  (val >=0 ? 1.0: 0.0 )
+    return  (val >=0 ? 1.0: -1.0 )
 end
 
 function trainer{T<:AbstractFloat}(model::KernelPerceptron{T},
 	                              X::AbstractArray{T},
         						  Y::Vector{T})
-
+   Y[Y .== 0]  = -1 # fix in the future outside this function
    max_epochs  = model.max_epochs
    λ           = model.λ    # langrange multipliers
-
    K           = ΦΦ(X,model.width) # computing the kernel gram matrix
-
-   n,m         = size(X)
+   n           = size(X,1)
    history     = []
    nerrors     = Inf
    epochs      = 0
@@ -111,7 +109,8 @@ function predictor{T<:AbstractFloat}(model::KernelPerceptron{T},
       end
       y[i] = s
    end
-
-   return sign.(y)
+   y   = sign.(y)
+   y[y .== -1]  = 0 # fix in the future outside this function!!
+   return y
 
 end
