@@ -71,8 +71,8 @@ function trainer{T<:AbstractFloat}(model::KernelPerceptron{T},
        nerrors = 0
        # weight updates for all samples
        for i=1:n
-          yp   = sign(∑(λ,y,n,K[:,i]))
-          if y[i] != yp
+          yp   = sign(∑(λ,Y,n,K[:,i]))
+          if Y[i] != yp
              nerrors +=1
 			 λ[i]    += 1    # missclassification counter for sample i
           end

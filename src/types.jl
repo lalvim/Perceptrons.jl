@@ -57,7 +57,7 @@ mutable struct KernelPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
    nfeatures::Integer
    kernel::String
    width::T
-   sv_x::AbstractArray{T}
+   sv_x::Vector{T}
    sv_y::Vector{T}
 end
 
@@ -70,6 +70,7 @@ function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
 
    return KernelPerceptron(X,
                            zeros(T,size(X,1)),
+                           0.0,
                            max_epochs,
                            0,
                            Vector{Integer}(1),
