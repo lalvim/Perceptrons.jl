@@ -88,7 +88,7 @@ function trainer{T<:AbstractFloat}(model::KernelPerceptron{T},
    model.history    = history
    model.last_epoch = epochs
 
-   println("[Kernel perceptron] #$(length(model.λ)) support vectors out of $(n) samples.")
+   #println("[Kernel perceptron] #$(length(model.λ)) support vectors out of $(n) samples.")
 
 
 end
