@@ -45,9 +45,7 @@ end
 
 #### Kernel Perceptron type
 mutable struct KernelPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
-   X::AbstractArray{T}
    λ::Vector{T} # lagrange vector
-   α::T
    max_epochs::Integer
    last_epoch::Integer
    history::Vector{Integer}
@@ -68,9 +66,7 @@ function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
                           kernel,
                           width)
 
-   return KernelPerceptron(X,
-                           zeros(T,size(X,1)),
-                           0.0,
+   return KernelPerceptron(zeros(T,size(X,1)),
                            max_epochs,
                            0,
                            Vector{Integer}(1),

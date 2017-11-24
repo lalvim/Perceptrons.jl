@@ -1,5 +1,12 @@
 using Perceptrons
 
+X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
+Y = [1.0 ; 1.0; 1.0; 0.0]
+
+model = Perceptrons.fit(X,Y,centralize=false,kernel="rbf",width=.1)
+pred  = Perceptrons.predict(model,X)
+pred
+
 
 @testset "Kernel Perceptron Tests (in sample)" begin
 

@@ -1,4 +1,3 @@
-const KTOL = 1.0e-5
 
 # A gaussian kernel function
 @inline function Φ{T<:AbstractFloat}(x::Vector{T},
@@ -45,7 +44,7 @@ end
     #        sum += λ[i]*y[i]*K[i,j]
     #    end
     #    return sum
-    return sum(λ .* y .* K,1)
+    return sum(λ .* y .* K)
 end
 
 @inline function sign(val)
@@ -57,7 +56,6 @@ function trainer{T<:AbstractFloat}(model::KernelPerceptron{T},
         						  Y::Vector{T})
 
    max_epochs  = model.max_epochs
-   α           = model.α    #  learning rate
    λ           = model.λ    # langrange multipliers
 
    K           = ΦΦ(X,model.width) # computing the kernel gram matrix
@@ -85,13 +83,14 @@ function trainer{T<:AbstractFloat}(model::KernelPerceptron{T},
    end
 
    # storing only the tough samples ("support vectors")
-   sv            = λ .> KTOL
-   model.λ       = λ[sv]
-   model.sv_x    = X[sv]
-   model.sv_y    = Y[sv]
-   model.history = history
+   sv               = λ .> 0
+   model.λ          = λ[sv]
+   model.sv_x       = vec(X[sv,:])
+   model.sv_y       = Y[sv]
+   model.history    = history
+   model.last_epoch = epochs
 
-   println("[Kernel perceptron] #$(len(self.alpha)) support vectors out of $(n) samples.")
+   println("[Kernel perceptron] #$(length(model.λ)) support vectors out of $(n) samples.")
 
 
 end
