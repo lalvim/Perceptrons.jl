@@ -1,7 +1,7 @@
 Perceptrons.jl
 ======
 
-A package with several types of Perceptron classifiers. Perceptrons are fast classifiers and can be used even for big data. Up to now, this package contains a linear perceptron for binary classification problems. However, this project will have the following perceptron classifiers: Multiclass, Kernel, Structured, Voted, Average and Sparse. Some state-of-the-art must be included after these.
+A package with several types of Perceptron classifiers. Perceptrons are fast classifiers and can be used even for big data. Up to now, this package contains a linear perceptron and a Kernel perceptron for binary classification problems. This project will have the following perceptron classifiers: Multiclass, Kernel, Structured, Voted, Average and Sparse. Some state-of-the-art must be included after these.
 
 [![Build Status](https://travis-ci.org/lalvim/Perceptrons.jl.svg?branch=master)](https://travis-ci.org/lalvim/Perceptrons.jl)
 
@@ -55,7 +55,7 @@ Examples
 What is Implemented
 ======
 * A fast algorithm for a linear perceptron with for a binary classification problem
-
+* A kernel perceptron for a binary classification problem
 
 What is Upcoming
 =======
