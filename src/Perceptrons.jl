@@ -5,6 +5,7 @@ using JLD
 include("utils.jl")
 include("types.jl")
 include("linear_perceptron.jl")
+include("kernel_perceptron.jl")
 
 
 
@@ -45,20 +46,15 @@ function fit{T<:AbstractFloat}(X::AbstractArray{T},
     Xi =  (copydata ? deepcopy(X) : X)
     Yi =  (copydata ? deepcopy(Y) : Y)
 
-    # Future: condition for linear or non linear
     check_linear_binary_labels(Yi)
-    model = LinearPerceptron(alpha, # I will refactor to a constructor. Cleaner
-                             Vector{T}(1),
-                             shuffle_epoch,
-                             random_state,
-                             max_epochs,
-                             0,
-                             Vector{Integer}(1),
-                             mean(X,1),
-                             std(X,1),
-                             centralize,
-                             size(X,2)
-                             )
+    model = Model(X,
+                  alpha,
+                  shuffle_epoch,
+                  random_state,
+                  max_epochs,
+                  centralize,
+                  kernel,
+                  width)
 
     Xi =  (centralize ? centralize_data(Xi,model.mx,model.sx) : Xi)
     model.centralize  = (centralize ? true: false)

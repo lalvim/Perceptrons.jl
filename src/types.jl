@@ -20,6 +20,96 @@ mutable struct LinearPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
    nfeatures::Integer
 end
 
+function LinearPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
+                          alpha,
+                          shuffle_epoch,
+                          random_state,
+                          max_epochs,
+                          centralize)
+
+   return LinearPerceptron(alpha, # I will refactor to a constructor. Cleaner
+                           Vector{T}(1),
+                           shuffle_epoch,
+                           random_state,
+                           max_epochs,
+                           0,
+                           Vector{Integer}(1),
+                           mean(X,1),
+                           std(X,1),
+                           centralize,
+                           size(X,2))
+
+end
+
+####################################################################################
+
+#### Kernel Perceptron type
+mutable struct KernelPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
+   λ::Vector{T} # lagrange vector
+   max_epochs::Integer
+   last_epoch::Integer
+   history::Vector{Integer}
+   mx::Matrix{T}          # mean stat after for z-scoring input data (X)
+   sx::Matrix{T}          # standard deviation stat after for z-scoring target data (X)
+   centralize::Bool
+   nfeatures::Integer
+   kernel::String
+   width::T
+   sv_x::Vector{T}
+   sv_y::Vector{T}
+end
+
+
+function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
+                          max_epochs,
+                          centralize,
+                          kernel,
+                          width)
+
+   return KernelPerceptron(zeros(T,size(X,1)),
+                           max_epochs,
+                           0,
+                           Vector{Integer}(1),
+                           mean(X,1),
+                           std(X,1),
+                           centralize,
+                           size(X,2),
+                           kernel,
+                           width,
+                           Vector{T}(1),
+                           Vector{T}(1))
+
+end
+
+## choosing types
+######################################################################################################
+function Model{T<:AbstractFloat}(X::AbstractArray{T},
+               alpha,
+               shuffle_epoch,
+               random_state,
+               max_epochs,
+               centralize,
+               kernel,
+               width)
+
+      if kernel == "linear"
+         return LinearPerceptron(X,
+                                 alpha,
+                                 shuffle_epoch,
+                                 random_state,
+                                 max_epochs,
+                                 centralize)
+      elseif kernel == "rbf"
+         return KernelPerceptron(X,
+                                 max_epochs,
+                                 centralize,
+                                 kernel,
+                                 width)
+      else
+         error("Invalid Kernel name: $(kernel)")
+      end
+end
+
 ######################################################################################################
 ## Load and Store models (good for production)
 function load(; filename::AbstractString = MODEL_FILENAME, modelname::AbstractString = MODEL_ID)
