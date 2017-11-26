@@ -20,7 +20,7 @@ println("[Voted Perceptron] accuracy : $(acc(Y_train,Y_pred))")
 # training a kernel perceptron (XOR)
 X_train = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
 Y_train = [0.0 ; 1.0; 1.0; 0.0]
-X_test  = X .+ .03 # adding noise
+X_test  = X_train .+ .03 # adding noise
 
 model   = Perceptrons.fit(X_train,Y_train,centralize=true,mode="kernel",kernel="rbf",width=.01)
 Y_pred  = Perceptrons.predict(model,X_test)
