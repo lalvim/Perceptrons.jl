@@ -72,7 +72,7 @@ function predictor{T<:AbstractFloat}(model::VotedPerceptron{T},
    y   = zeros(Real,n)
    X   = hcat(X,ones(n,1)) # adding bias
    for i=1:n
-      y[i] = sinal(vote(Θ[i],X[i,:],c[i],k))
+      y[i] = sinal(vote(Θ[i],X[i,:],c,k))
    end
    y
 
