@@ -1,3 +1,5 @@
+# use in linear perceptron
+@inline   h(Θ,x) = sinal(Θ'*x)
 
 
 function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
