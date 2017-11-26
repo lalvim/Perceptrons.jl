@@ -7,7 +7,7 @@
    s
 end
 
-function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
+function trainer{T<:AbstractFloat}(model::VotedPerceptron{T},
 	                              X::AbstractArray{T},
         								   Y::Vector{T})
 
@@ -60,7 +60,7 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
    model.history = history
 end
 
-function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
+function predictor{T<:AbstractFloat}(model::VotedPerceptron{T},
 	                                    X::AbstractArray{T})
 
    Θ = model.Θ
