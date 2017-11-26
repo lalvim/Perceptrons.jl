@@ -40,6 +40,48 @@ function LinearPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
                            size(X,2))
 
 end
+####################################################################################
+
+#### Linear Perceptron type
+mutable struct VotedPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
+   α::T
+   Θ#::Dict{Integer,Vector{T}}
+   c#::Dict{Integer,Integer}
+   k::Integer
+   shuffle_epoch::Bool
+   random_state::Integer
+   max_epochs::Integer
+   last_epoch::Integer
+   history::Vector{Integer}
+   mx::Matrix{T}          # mean stat after for z-scoring input data (X)
+   sx::Matrix{T}          # standard deviation stat after for z-scoring target data (X)
+   centralize::Bool
+   nfeatures::Integer
+end
+
+function VotedPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
+                          alpha,
+                          shuffle_epoch,
+                          random_state,
+                          max_epochs,
+                          centralize)
+
+   return VotedPerceptron(alpha, # I will refactor to a constructor. Cleaner
+                           nothing,
+                           nothing,
+                           0,
+                           shuffle_epoch,
+                           random_state,
+                           max_epochs,
+                           0,
+                           Vector{Integer}(1),
+                           mean(X,1),
+                           std(X,1),
+                           centralize,
+                           size(X,2))
+
+end
+
 
 ####################################################################################
 
@@ -90,23 +132,32 @@ function Model{T<:AbstractFloat}(X::AbstractArray{T},
                max_epochs,
                centralize,
                kernel,
-               width)
+               width,
+               mode)
 
-      if kernel == "linear"
+      if mode == "linear"
          return LinearPerceptron(X,
                                  alpha,
                                  shuffle_epoch,
                                  random_state,
                                  max_epochs,
                                  centralize)
-      elseif kernel == "rbf"
+      elseif mode == "kernel"
          return KernelPerceptron(X,
                                  max_epochs,
                                  centralize,
                                  kernel,
                                  width)
+      elseif mode == "voted"
+      return VotedPerceptron(X,
+                           alpha,
+                           shuffle_epoch,
+                           random_state,
+                           max_epochs,
+                           centralize)
+
       else
-         error("Invalid Kernel name: $(kernel)")
+         error("Invalid perceptron mode name: $(mode). \n Cadidates are: linear, kernel or voted")
       end
 end
 

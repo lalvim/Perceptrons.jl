@@ -1,8 +1,16 @@
-# use in linear perceptron
-@inline   h(Θ,x) = sinal(Θ'*x)
 
 
-function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
+
+@inline function vote(Θ,x,c,k)
+
+   s = 0
+   for j=1:k
+       s += c[j]*sign(Θ[j]'*x) # voting (+1 or -1 * c[j] weight)
+   end
+   s
+end
+
+function trainer{T<:AbstractFloat}(model::VotedPerceptron{T},
 	                              X::AbstractArray{T},
         								   Y::Vector{T})
 
@@ -19,9 +27,9 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
    history     = []
    nerrors,nlast_errors = Inf,0
    epochs      = 0
-   Θ           = rand(m+1)   #  already with bias
-   α           = model.α   #  learning rate
-   while  nerrors>0 && epochs < max_epochs
+   k,Θ,c,α     = 1,Dict(1=>rand(m+1)),Dict(1=>0),model.α
+   #while  nerrors>0 && epochs < max_epochs
+   while  epochs < max_epochs
    # stops when error is equal to zero or grater than last_error or reached max iterations
        # shuffle dataset
        if shuffle_epoch
@@ -33,10 +41,14 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
        # weight updates for all samples
        for i=1:n
           xi = x[i,:]
-          ξ   = h(Θ,xi) - y[i]
-          if ξ!=0
+          ξ   = sinal(Θ[k]'*xi) - y[i]
+          if ξ==0
+             c[k] += 1
+          else
              nerrors+=1
-			    Θ = Θ - α * ξ * xi
+             c[k+1] = 1
+			    Θ[k+1] = Θ[k] - α * ξ * xi
+             k     += 1
           end
 		 end
        nlast_errors   = nerrors
@@ -47,21 +59,24 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
       warn("Perceptron: Not converged. Max epochs $(max_epochs) reached. Error history: $(history) \n Try to increase max_epochs or may be you have a non linear problem.")
    end
    model.Θ = Θ
-   model.α = α
+   model.c = c
+   model.k = k
    model.history = history
 end
 
-function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
+function predictor{T<:AbstractFloat}(model::VotedPerceptron{T},
 	                                    X::AbstractArray{T})
 
    Θ = model.Θ
    α = model.α
+   k = model.k
+   c = model.c
 
-   n,m = size(X)
+   n   = size(X,1)
    y   = zeros(Real,n)
    X   = hcat(X,ones(n,1)) # adding bias
    for i=1:n
-       y[i] = h(Θ,X[i,:])
+      y[i] = sinal(vote(Θ,X[i,:],c,k))
    end
    y
 

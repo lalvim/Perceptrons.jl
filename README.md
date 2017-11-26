@@ -1,7 +1,7 @@
 Perceptrons.jl
 ======
 
-A package with several types of Perceptron classifiers. Perceptrons are fast classifiers and can be used even for big data. Up to now, this package contains a linear perceptron and a Kernel perceptron for binary classification problems. This project will have the following perceptron classifiers: Multiclass, Kernel, Structured, Voted, Average and Sparse. Some state-of-the-art must be included after these.
+A package with several types of Perceptron classifiers. Perceptrons are fast classifiers and can be used even for big data. Up to now, this package contains a linear perceptron, voted perceptron and a Kernel perceptron for binary classification problems. This project will have the following perceptron classifiers: Multiclass, Kernel, Structured, Voted, Average and Sparse. Some state-of-the-art must be included after these.
 
 [![Build Status](https://travis-ci.org/lalvim/Perceptrons.jl.svg?branch=master)](https://travis-ci.org/lalvim/Perceptrons.jl)
 
@@ -34,15 +34,22 @@ Examples
 
     println("[Perceptron] accuracy : $(acc(Y_train,Y_pred))")
 
+    # training a voted perceptron
+    model   = Perceptrons.fit(X_train,Y_train,centralize=true,mode="voted")
+    Y_pred  = Perceptrons.predict(model,X_test)
+
+    println("[Voted Perceptron] accuracy : $(acc(Y_train,Y_pred))")
+
+
     # training a kernel perceptron (XOR)
     X_train = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
     Y_train = [0.0 ; 1.0; 1.0; 0.0]
-    X_test  = X .+ .03 # adding noise
+    X_test  = X_train .+ .03 # adding noise
 
-    model   = Perceptrons.fit(X_train,Y_train,centralize=true,kernel="rbf",width=.01)
+    model   = Perceptrons.fit(X_train,Y_train,centralize=true,mode="kernel",kernel="rbf",width=.01)
     Y_pred  = Perceptrons.predict(model,X_test)
 
-    println("[Perceptron] accuracy : $(acc(Y_train,Y_pred))")
+    println("[Kernel Perceptron] accuracy : $(acc(Y_train,Y_pred))")
 
 
     # if you want to save your model
@@ -59,7 +66,6 @@ What is Implemented
 
 What is Upcoming
 =======
-* Kernel Perceptron
 * Multiclass Perceptron
 * Voted Perceptron
 * Average Perceptron
