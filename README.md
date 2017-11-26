@@ -34,15 +34,22 @@ Examples
 
     println("[Perceptron] accuracy : $(acc(Y_train,Y_pred))")
 
+    # training a voted perceptron
+    model   = Perceptrons.fit(X_train,Y_train,centralize=true,mode="voted")
+    Y_pred  = Perceptrons.predict(model,X_test)
+
+    println("[Voted Perceptron] accuracy : $(acc(Y_train,Y_pred))")
+
+
     # training a kernel perceptron (XOR)
     X_train = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
     Y_train = [0.0 ; 1.0; 1.0; 0.0]
     X_test  = X .+ .03 # adding noise
 
-    model   = Perceptrons.fit(X_train,Y_train,centralize=true,kernel="rbf",width=.01)
+    model   = Perceptrons.fit(X_train,Y_train,centralize=true,mode="kernel",kernel="rbf",width=.01)
     Y_pred  = Perceptrons.predict(model,X_test)
 
-    println("[Perceptron] accuracy : $(acc(Y_train,Y_pred))")
+    println("[Kernel Perceptron] accuracy : $(acc(Y_train,Y_pred))")
 
 
     # if you want to save your model
@@ -59,7 +66,6 @@ What is Implemented
 
 What is Upcoming
 =======
-* Kernel Perceptron
 * Multiclass Perceptron
 * Voted Perceptron
 * Average Perceptron
