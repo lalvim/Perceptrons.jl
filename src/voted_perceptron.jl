@@ -28,7 +28,8 @@ function trainer{T<:AbstractFloat}(model::VotedPerceptron{T},
    nerrors,nlast_errors = Inf,0
    epochs      = 0
    k,Θ,c,α     = 1,Dict(1=>rand(m+1)),Dict(1=>0),model.α
-   while  nerrors>0 && epochs < max_epochs
+   #while  nerrors>0 && epochs < max_epochs
+   while  epochs < max_epochs
    # stops when error is equal to zero or grater than last_error or reached max iterations
        # shuffle dataset
        if shuffle_epoch
@@ -76,7 +77,6 @@ function predictor{T<:AbstractFloat}(model::VotedPerceptron{T},
    X   = hcat(X,ones(n,1)) # adding bias
    for i=1:n
       y[i] = sinal(vote(Θ,X[i,:],c,k))
-      println("y[i] = ",y[i])
    end
    y
 

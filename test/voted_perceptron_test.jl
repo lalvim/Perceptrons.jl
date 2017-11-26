@@ -1,6 +1,22 @@
 using Perceptrons
 
 
+@testset "OR function" begin
+
+    X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
+    Y = [1.0 ; 1.0; 1.0; 0.0]
+
+    model = Perceptrons.fit(X,Y,centralize=false,mode="voted",max_epochs=100)
+    pred  = Perceptrons.predict(model,X)
+
+    @test all(pred .== Y)
+
+    model = Perceptrons.fit(X,Y,centralize=true,mode="voted",max_epochs=100)
+    pred  = Perceptrons.predict(model,X)
+
+    @test all(pred .== Y)
+end
+
 @testset "Voted Perceptron Tests (in sample)" begin
 
 
@@ -9,12 +25,12 @@ using Perceptrons
         X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
         Y = [1.0 ; 1.0; 1.0; 0.0]
 
-        model = Perceptrons.fit(X,Y,centralize=false,mode="voted")
+        model = Perceptrons.fit(X,Y,centralize=false,mode="voted",max_epochs=100)
         pred  = Perceptrons.predict(model,X)
 
     	@test all(pred .== Y)
 
-        model = Perceptrons.fit(X,Y,centralize=true,mode="voted")
+        model = Perceptrons.fit(X,Y,centralize=true,mode="voted",max_epochs=100)
         pred  = Perceptrons.predict(model,X)
 
         @test all(pred .== Y)
@@ -26,12 +42,12 @@ using Perceptrons
         X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
         Y = [1.0 ; 0.0; 0.0; 0.0]
 
-        model = Perceptrons.fit(X,Y,centralize=false,mode="voted")
+        model = Perceptrons.fit(X,Y,centralize=false,mode="voted",max_epochs=100)
         pred  = Perceptrons.predict(model,X)
 
         @test all(pred .== Y)
 
-        model = Perceptrons.fit(X,Y,centralize=true,mode="voted")
+        model = Perceptrons.fit(X,Y,centralize=true,mode="voted",max_epochs=100)
         pred  = Perceptrons.predict(model,X)
 
         @test all(pred .== Y)
@@ -49,7 +65,7 @@ end
         X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
         Y = [1.0 ; 1.0; 1.0; 0.0]
         Xt = X .+ .3
-        model = Perceptrons.fit(X,Y,centralize=true,mode="voted")
+        model = Perceptrons.fit(X,Y,centralize=true,mode="voted",max_epochs=100)
         pred  = Perceptrons.predict(model,Xt)
         @test all(pred .== Y)
 
@@ -61,7 +77,7 @@ end
         Y = [1.0 ; 0.0; 0.0; 0.0]
         Xt = X .+ .03
 
-        model = Perceptrons.fit(X,Y,centralize=true,alpha=1.0,mode="voted")
+        model = Perceptrons.fit(X,Y,centralize=true,alpha=1.0,mode="voted",max_epochs=100)
         pred  = Perceptrons.predict(model,Xt)
 
     end
@@ -73,6 +89,6 @@ end
     X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
     Y = [1.0 ; -1; 0.0; 0.0]
 
-    try model = Perceptrons.fit(X,Y,mode="voted") catch @test true end
+    try model = Perceptrons.fit(X,Y,mode="voted",max_epochs=100) catch @test true end
 
 end

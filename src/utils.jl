@@ -9,8 +9,6 @@ export acc
 @inline sinal(x) = (x>=0 ? 1.0 : 0.0)
 # used in kernel perceptron
 @inline sign(val) = (val >=0 ? 1.0: -1.0 )
-# use in linear and voted perceptron
-@inline   h(Θ,x) = sinal(Θ'*x)
 
 
 ## checks PLS input data and params
