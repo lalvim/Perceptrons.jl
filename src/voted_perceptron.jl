@@ -1,8 +1,11 @@
+
+
+
 @inline function vote(Θ,x,c,k)
 
    s = 0
    for j=1:k
-       s += c[j]*h(Θ,x) # voting
+       s += c[j]*sign(Θ[j]'*x) # voting (+1 or -1 * c[j] weight)
    end
    s
 end
@@ -24,7 +27,7 @@ function trainer{T<:AbstractFloat}(model::VotedPerceptron{T},
    history     = []
    nerrors,nlast_errors = Inf,0
    epochs      = 0
-   k,Θ,c,α     = 0,Dict(0=>rand(m+1)),Dict(0=>0),model.α
+   k,Θ,c,α     = 1,Dict(1=>rand(m+1)),Dict(1=>0),model.α
    while  nerrors>0 && epochs < max_epochs
    # stops when error is equal to zero or grater than last_error or reached max iterations
        # shuffle dataset
@@ -37,7 +40,7 @@ function trainer{T<:AbstractFloat}(model::VotedPerceptron{T},
        # weight updates for all samples
        for i=1:n
           xi = x[i,:]
-          ξ   = h(Θ[k],xi) - y[i]
+          ξ   = sinal(Θ[k]'*xi) - y[i]
           if ξ==0
              c[k] += 1
           else
@@ -72,7 +75,8 @@ function predictor{T<:AbstractFloat}(model::VotedPerceptron{T},
    y   = zeros(Real,n)
    X   = hcat(X,ones(n,1)) # adding bias
    for i=1:n
-      y[i] = sinal(vote(Θ[i],X[i,:],c,k))
+      y[i] = sinal(vote(Θ,X[i,:],c,k))
+      println("y[i] = ",y[i])
    end
    y
 
