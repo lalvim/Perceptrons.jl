@@ -2,7 +2,7 @@
 
    s = 0
    for j=1:k
-       s += c[j]*h(Θ,X[i,:]) # voting
+       s += c[j]*h(Θ,x) # voting
    end
    s
 end
