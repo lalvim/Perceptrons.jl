@@ -37,7 +37,7 @@ function trainer{T<:AbstractFloat}(model::VotedPerceptron{T},
        # weight updates for all samples
        for i=1:n
           xi = x[i,:]
-          ξ   = h(Θ,xi) - y[i]
+          ξ   = h(Θ[k],xi) - y[i]
           if ξ==0
              c[k] += 1
           else
