@@ -6,7 +6,7 @@ export acc
 @inline acc(yt,yp) = count(x->x==true, yt .== yp)/length(yt)
 
 # used in linear and voted perceptron
-@inline sinal(x) = x>=0 ? 1.0 : 0.0
+@inline sinal(x) = (x>=0 ? 1.0 : 0.0)
 # used in kernel perceptron
 @inline sign(val) = (val >=0 ? 1.0: -1.0 )
 # use in linear and voted perceptron
