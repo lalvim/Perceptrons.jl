@@ -3,9 +3,15 @@
 ## Auxiliary functions
 export acc
 
-function acc(yt,yp)
-      count(x->x==true, yt .== yp)/length(yt)
-end
+@inline acc(yt,yp) = count(x->x==true, yt .== yp)/length(yt)
+
+# used in linear and voted perceptron
+@inline sinal(x) = x>=0 ? 1.0 : 0.0
+# used in kernel perceptron
+@inline sign(val) = (val >=0 ? 1.0: -1.0 )
+# use in linear and voted perceptron
+@inline   h(Θ,x) = sinal(Θ'*x)
+
 
 ## checks PLS input data and params
 function check_data{T<:AbstractFloat}(X::Matrix{T},Y::Union{Vector{T},Matrix{T}})
@@ -25,8 +31,9 @@ function check_data{T<:AbstractFloat}(X::Matrix{T},nfeatures::Int)
 end
 
 
-function check_params(kernel::AbstractString)
-    kernel == "rbf" || kernel == "linear" || error("kernel must be kernel='linear' or kernel='rbf'")
+function check_params(kernel::AbstractString,mode::AbstractString)
+    kernel in ["rbf","linear"] || error("kernel must be 'linear' or 'rbf'")
+    mode   in ["kernel","linear","voted"] || error("mode must be 'linear' or 'kernel' or 'voted'")
 end
 
 ## checks constant columns

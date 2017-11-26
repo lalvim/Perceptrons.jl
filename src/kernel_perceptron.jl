@@ -38,14 +38,7 @@ function ΦΦ{T<:AbstractFloat}(X::AbstractArray{T},
     K
 end
 
-@inline function ∑(λ,y,n,K)
-    #    sum = .0
-    #    for i=1:n
-    #        sum += λ[i]*y[i]*K[i,j]
-    #    end
-    #    return sum
-    return sum(λ .* y .* K)
-end
+@inline ∑(λ,y,n,K) = sum(λ .* y .* K)
 
 @inline function sign(val)
     return  (val >=0 ? 1.0: -1.0 )

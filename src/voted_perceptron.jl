@@ -1,7 +1,11 @@
+@inline function vote(Θ,x,c,k)
 
-@inline sinal(x) = x>=0 ? 1.0 : 0.0
-
-@inline h(Θ,x) = sinal(Θ'*x)
+   s = 0
+   for j=1:k
+       s += c[j]*h(Θ,X[i,:]) # voting
+   end
+   s
+end
 
 function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
 	                              X::AbstractArray{T},
@@ -20,8 +24,7 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
    history     = []
    nerrors,nlast_errors = Inf,0
    epochs      = 0
-   Θ           = rand(m+1)   #  already with bias
-   α           = model.α   #  learning rate
+   k,Θ,c,α     = 0,Dict(0=>rand(m+1)),Dict(0=>0),model.α
    while  nerrors>0 && epochs < max_epochs
    # stops when error is equal to zero or grater than last_error or reached max iterations
        # shuffle dataset
@@ -35,9 +38,13 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
        for i=1:n
           xi = x[i,:]
           ξ   = h(Θ,xi) - y[i]
-          if ξ!=0
+          if ξ==0
+             c[k] += 1
+          else
              nerrors+=1
-			    Θ = Θ - α * ξ * xi
+             c[k+1] = 1
+			    Θ[k+1] = Θ[k] - α * ξ * xi
+             k     += 1
           end
 		 end
        nlast_errors   = nerrors
@@ -48,7 +55,8 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
       warn("Perceptron: Not converged. Max epochs $(max_epochs) reached. Error history: $(history) \n Try to increase max_epochs or may be you have a non linear problem.")
    end
    model.Θ = Θ
-   model.α = α
+   model.c = c
+   model.k = k
    model.history = history
 end
 
@@ -57,12 +65,14 @@ function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
 
    Θ = model.Θ
    α = model.α
+   k = model.k
+   c = model.c
 
-   n,m = size(X)
+   n   = size(X,1)
    y   = zeros(Real,n)
    X   = hcat(X,ones(n,1)) # adding bias
    for i=1:n
-       y[i] = h(Θ,X[i,:])
+      y[i] = sinal(vote(Θ[i],X[i,:],c[i],k))
    end
    y
 
