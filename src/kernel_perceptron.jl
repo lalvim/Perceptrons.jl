@@ -40,9 +40,6 @@ end
 
 @inline ∑(λ,y,n,K) = sum(λ .* y .* K)
 
-@inline function sign(val)
-    return  (val >=0 ? 1.0: -1.0 )
-end
 
 function trainer{T<:AbstractFloat}(model::KernelPerceptron{T},
 	                              X::AbstractArray{T},

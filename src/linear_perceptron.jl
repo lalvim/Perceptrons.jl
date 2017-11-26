@@ -1,7 +1,4 @@
 
-@inline sinal(x) = x>=0 ? 1.0 : 0.0
-
-@inline h(Θ,x) = sinal(Θ'*x)
 
 function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
 	                              X::AbstractArray{T},
