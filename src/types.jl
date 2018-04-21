@@ -20,12 +20,12 @@ mutable struct LinearPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
    nfeatures::Integer
 end
 
-function LinearPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
+function LinearPerceptron(X::AbstractArray{T},
                           alpha,
                           shuffle_epoch,
                           random_state,
                           max_epochs,
-                          centralize)
+                          centralize) where T<:AbstractFloat
 
    return LinearPerceptron(alpha, # I will refactor to a constructor. Cleaner
                            Vector{T}(1),
@@ -59,12 +59,12 @@ mutable struct VotedPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
    nfeatures::Integer
 end
 
-function VotedPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
+function VotedPerceptron(X::AbstractArray{T},
                           alpha,
                           shuffle_epoch,
                           random_state,
                           max_epochs,
-                          centralize)
+                          centralize) where T<:AbstractFloat
 
    return VotedPerceptron(alpha, # I will refactor to a constructor. Cleaner
                            nothing,
@@ -102,11 +102,11 @@ mutable struct KernelPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
 end
 
 
-function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
+function KernelPerceptron(X::AbstractArray{T},
                           max_epochs,
                           centralize,
                           kernel,
-                          width)
+                          width) where T<:AbstractFloat
 
    return KernelPerceptron(zeros(T,size(X,1)),
                            max_epochs,
@@ -123,9 +123,51 @@ function KernelPerceptron{T<:AbstractFloat}(X::AbstractArray{T},
 
 end
 
+####################################################################################
+
+#### Averaged Perceptron type
+mutable struct AveragedPerceptron{T<:AbstractFloat} <: PerceptronModel{T}
+   α::T
+   Θ
+   shuffle_epoch::Bool
+   random_state::Integer
+   max_epochs::Integer
+   last_epoch::Integer
+   history::Vector{Integer}
+   mx::Matrix{T}          # mean stat after for z-scoring input data (X)
+   sx::Matrix{T}          # standard deviation stat after for z-scoring target data (X)
+   centralize::Bool
+   nfeatures::Integer
+end
+
+function AveragedPerceptron(X::AbstractArray{T},
+                          alpha,
+                          shuffle_epoch,
+                          random_state,
+                          max_epochs,
+                          centralize) where T<:AbstractFloat
+
+   return AveragedPerceptron(alpha, # I will refactor to a constructor. Cleaner
+                           0,
+                           shuffle_epoch,
+                           random_state,
+                           max_epochs,
+                           0,
+                           Vector{Integer}(1),
+                           mean(X,1),
+                           std(X,1),
+                           centralize,
+                           size(X,2))
+
+end
+
+
+
+
+
 ## choosing types
 ######################################################################################################
-function Model{T<:AbstractFloat}(X::AbstractArray{T},
+function Model(X::AbstractArray{T},
                alpha,
                shuffle_epoch,
                random_state,
@@ -133,7 +175,7 @@ function Model{T<:AbstractFloat}(X::AbstractArray{T},
                centralize,
                kernel,
                width,
-               mode)
+               mode) where T<:AbstractFloat
 
       if mode == "linear"
          return LinearPerceptron(X,
@@ -155,9 +197,15 @@ function Model{T<:AbstractFloat}(X::AbstractArray{T},
                            random_state,
                            max_epochs,
                            centralize)
-
+      elseif mode == "averaged"
+      return AveragedPerceptron(X,
+                           alpha,
+                           shuffle_epoch,
+                           random_state,
+                           max_epochs,
+                           centralize)
       else
-         error("Invalid perceptron mode name: $(mode). \n Cadidates are: linear, kernel or voted")
+         error("Invalid perceptron mode name: $(mode). \n Cadidates are: linear, kernel, voted or averaged")
       end
 end
 
