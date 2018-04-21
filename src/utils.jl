@@ -12,7 +12,7 @@ export acc
 
 
 ## checks PLS input data and params
-function check_data{T<:AbstractFloat}(X::Matrix{T},Y::Union{Vector{T},Matrix{T}})
+function check_data(X::Matrix{T},Y::Union{Vector{T},Matrix{T}}) where T<:AbstractFloat
     !isempty(X) ||
         throw(DimensionMismatch("Empty input data (X)."))
     !isempty(Y) ||
@@ -21,7 +21,7 @@ function check_data{T<:AbstractFloat}(X::Matrix{T},Y::Union{Vector{T},Matrix{T}}
         throw(DimensionMismatch("Incompatible number of rows of input data (X) and target data (Y)."))
 end
 
-function check_data{T<:AbstractFloat}(X::Matrix{T},nfeatures::Int)
+function check_data(X::Matrix{T},nfeatures::Int) where T<:AbstractFloat
     !isempty(X) ||
         throw(DimensionMismatch("Empty input data (X)."))
     size(X, 2) == nfeatures ||
@@ -31,7 +31,7 @@ end
 
 function check_params(kernel::AbstractString,mode::AbstractString)
     kernel in ["rbf","linear"] || error("kernel must be 'linear' or 'rbf'")
-    mode   in ["kernel","linear","voted"] || error("mode must be 'linear' or 'kernel' or 'voted'")
+    mode   in ["kernel","linear","voted","averaged"] || error("mode must be 'linear' or 'kernel' or 'voted' or 'averaged'")
 end
 
 ## checks constant columns
