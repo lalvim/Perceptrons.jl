@@ -2,9 +2,9 @@
 @inline   h(Θ,x) = sinal(Θ'*x)
 
 
-function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
-	                              X::AbstractArray{T},
-        								   Y::Vector{T})
+function trainer(model::LinearPerceptron{T},
+	              X::AbstractArray{T},
+					  Y::Vector{T}) where T<:AbstractFloat
 
    shuffle_epoch = model.shuffle_epoch
    random_state  = model.random_state
@@ -51,8 +51,8 @@ function trainer{T<:AbstractFloat}(model::LinearPerceptron{T},
    model.history = history
 end
 
-function predictor{T<:AbstractFloat}(model::LinearPerceptron{T},
-	                                    X::AbstractArray{T})
+function predictor(model::LinearPerceptron{T},
+	                X::AbstractArray{T}) where T<:AbstractFloat
 
    Θ = model.Θ
    α = model.α

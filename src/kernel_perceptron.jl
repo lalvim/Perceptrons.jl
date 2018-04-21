@@ -1,16 +1,16 @@
 
 # A gaussian kernel function
-@inline function Φ{T<:AbstractFloat}(x::Vector{T},
-                                     y::Vector{T},
-                                     r::T=1.0)
+@inline function Φ(x::Vector{T},
+                   y::Vector{T},
+                   r::T=1.0) where T<:AbstractFloat
     n  = 1.0 / sqrt(2π*r)
     s  = 1.0 / (2r^2)
     return n*exp(-s*sum((x.-y).^2))
 end
 
 # A kernel matrix
-function ΦΦ{T<:AbstractFloat}(X::AbstractArray{T},
-                              r::T=1.0)
+function ΦΦ(X::AbstractArray{T},
+            r::T=1.0) where T<:AbstractFloat
     n = size(X,1)
     K = zeros(n,n)
     for i=1:n
@@ -24,9 +24,9 @@ function ΦΦ{T<:AbstractFloat}(X::AbstractArray{T},
 end
 
 # A kernel matrix for test data
-function ΦΦ{T<:AbstractFloat}(X::AbstractArray{T},
-                              Z::AbstractArray{T},
-                              r::T=1.0)
+function ΦΦ(X::AbstractArray{T},
+            Z::AbstractArray{T},
+            r::T=1.0) where T<:AbstractFloat
     (nx,mx)    = size(X)
     (nz,mz)    = size(Z)
     K          = zeros(T,nz, nx)
@@ -41,9 +41,9 @@ end
 @inline ∑(λ,y,n,K) = sum(λ .* y .* K)
 
 
-function trainer{T<:AbstractFloat}(model::KernelPerceptron{T},
-	                              X::AbstractArray{T},
-        						  Y::Vector{T})
+function trainer(model::KernelPerceptron{T},
+	              X::AbstractArray{T},
+        			  Y::Vector{T}) where T<:AbstractFloat
    Y[Y .== 0]  = -1 # fix in the future outside this function
    max_epochs  = model.max_epochs
    λ           = model.λ    # langrange multipliers
@@ -83,8 +83,8 @@ function trainer{T<:AbstractFloat}(model::KernelPerceptron{T},
 
 end
 
-function predictor{T<:AbstractFloat}(model::KernelPerceptron{T},
-	                                    X::AbstractArray{T})
+function predictor(model::KernelPerceptron{T},
+	                X::AbstractArray{T}) where T<:AbstractFloat
 
    width        = model.width
    sv_x,sv_y,λ  = model.sv_x,model.sv_y,model.λ
