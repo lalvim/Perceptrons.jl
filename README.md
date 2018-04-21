@@ -85,6 +85,7 @@ Method Description
     * Y::Vector{:<AbstractFloat} - A vector with float values.
     * copydata::Bool = true: If you want to use the same input matrix or a copy.
     * centralize::Bool = true: If you want to z-score columns. Recommended if not z-scored yet.
+    * mode::AbstractString =  "linear": modes are "linear", "kernel", "voted" and "averaged" perceptron.
     * kernel::AbstractString = "rbf": If you want to apply a nonlinear Perceptron with gaussian Kernel.
     * width::AbstractFloat = 1.0: Rbf Kernel width (Only if kernel="rbf").
     * alpha::Real = 1.0e-2: learning rate.
