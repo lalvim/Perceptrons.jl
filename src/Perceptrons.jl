@@ -7,6 +7,8 @@ include("types.jl")
 include("linear_perceptron.jl")
 include("kernel_perceptron.jl")
 include("voted_perceptron.jl")
+include("averaged_perceptron.jl")
+
 
 
 
@@ -25,9 +27,9 @@ Perceptron algorithm.
 - `shuffle_epoch::Bool = true`: Shuffle dataset for each epoch. Improves convergency.
 - `random_state::Int = 42`: Use a seed to force same results trhough the same dataset.
 - `max_epochs::Int = 5`: Maximum epochs.
-- `mode::String = "linear"`: modes are "linear", "kernel" or "voted" perceptron.
+- `mode::String = "linear"`: modes are "linear", "kernel", "voted" and "averaged" perceptron.
 """
-function fit{T<:AbstractFloat}(X::AbstractArray{T},
+function fit(X::AbstractArray{T},
                                Y::AbstractArray{T};
                                copydata::Bool         = true,
                                centralize::Bool       = true,
@@ -38,7 +40,7 @@ function fit{T<:AbstractFloat}(X::AbstractArray{T},
                                random_state::Int      = 42,
                                max_epochs::Int        = 50,
                                mode                   = "linear"
-                               )
+                               ) where T<:AbstractFloat
     X = X[:,:]
     check_constant_cols(X)
     check_constant_cols(Y)
@@ -78,9 +80,9 @@ A Perceptron predictor.
 # Arguments
 - `copydata::Bool = true`: If you want to use the same input matrix or a copy.
 """
-function predict{T<:AbstractFloat}(model::PerceptronModel{T},
-                                    X::AbstractArray{T};
-                                    copydata::Bool=true)
+function predict(model::PerceptronModel{T},
+                 X::AbstractArray{T};
+                 copydata::Bool=true) where T<:AbstractFloat
 
     X = X[:,:]
     check_data(X,model.nfeatures)
