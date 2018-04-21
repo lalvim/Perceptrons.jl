@@ -61,14 +61,14 @@ Examples
 
 What is Implemented
 ======
-* A fast algorithm for a linear perceptron with for a binary classification problem
-* A kernel perceptron for a binary classification problem
+* Voted Perceptron
+* Average Perceptron
+* Kernel Perceptron
+* Linear Perceptron
 
 What is Upcoming
 =======
 * Multiclass Perceptron
-* Voted Perceptron
-* Average Perceptron
 * Structured Perceptron
 * Sparse Perceptron
 
