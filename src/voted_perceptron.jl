@@ -10,9 +10,9 @@
    s
 end
 
-function trainer{T<:AbstractFloat}(model::VotedPerceptron{T},
-	                              X::AbstractArray{T},
-        								   Y::Vector{T})
+function trainer(model::VotedPerceptron{T},
+                 X::AbstractArray{T},
+					  Y::Vector{T}) where T<:AbstractFloat
 
    shuffle_epoch = model.shuffle_epoch
    random_state  = model.random_state
@@ -64,8 +64,8 @@ function trainer{T<:AbstractFloat}(model::VotedPerceptron{T},
    model.history = history
 end
 
-function predictor{T<:AbstractFloat}(model::VotedPerceptron{T},
-	                                    X::AbstractArray{T})
+function predictor(model::VotedPerceptron{T},
+	                X::AbstractArray{T}) where T<:AbstractFloat
 
    Θ = model.Θ
    α = model.α
