@@ -64,7 +64,7 @@ function fit(X::AbstractArray{T},
                   mode)
 
     Xi =  (centralize ? centralize_data(Xi,model.mx,model.sx) : Xi)
-    model.centralize  = (centralize ? true: false)
+    model.centralize  = ( centralize ? true : false )
 
     trainer(model,Xi,Yi)
 
