@@ -2,6 +2,8 @@
 const MODEL_FILENAME = "perceptron_model.jld" # jld filename for storing the model
 const MODEL_ID       = "perceptron_model"     # if od the model in the filesystem jld data
 
+using Statistics 
+
 #### An abstract perceptron model
 abstract type PerceptronModel{T} end
 
