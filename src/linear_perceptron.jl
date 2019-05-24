@@ -26,7 +26,7 @@ function trainer(model::LinearPerceptron{T},
    # stops when error is equal to zero or grater than last_error or reached max iterations
        # shuffle dataset
        if shuffle_epoch
-          sind = shuffle(1:n)
+          sind = Random.shuffle(1:n)
           x = X[sind,:]
           y = Y[sind]
        end
