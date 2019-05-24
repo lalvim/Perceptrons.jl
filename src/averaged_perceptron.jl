@@ -1,3 +1,4 @@
+import Random
 
 function trainer(model::AveragedPerceptron{T},
 	              X::AbstractArray{T},
@@ -8,7 +9,7 @@ function trainer(model::AveragedPerceptron{T},
    max_epochs    = model.max_epochs
 
    if random_state!=-1
-      srand(random_state)
+      Random.seed!(random_state)
    end
 
    n,m         = size(X)
@@ -16,14 +17,14 @@ function trainer(model::AveragedPerceptron{T},
    history     = []
    nerrors,nlast_errors = Inf,0
    epochs      = 0
-   Θ,α         = rand(m+1),model.α
+   Θ,α         = Random.rand(m+1),model.α
    step        = float(n*max_epochs)
    #while  nerrors>0 && epochs < max_epochs
    while  epochs < max_epochs
    # stops when error is equal to zero or grater than last_error or reached max iterations
        # shuffle dataset
        if shuffle_epoch
-          sind = shuffle(1:n)
+          sind = Random.shuffle(1:n)
           x = X[sind,:]
           y = Y[sind]
        end
