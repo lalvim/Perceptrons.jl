@@ -44,7 +44,7 @@ end
 function trainer(model::KernelPerceptron{T},
 	              X::AbstractArray{T},
         			  Y::Vector{T}) where T<:AbstractFloat
-   Y[Y .== 0]  = -1 # fix in the future outside this function
+   Y[Y .== 0]  .= -1 # fix in the future outside this function
    max_epochs  = model.max_epochs
    λ           = model.λ    # langrange multipliers
    K           = ΦΦ(X,model.width) # computing the kernel gram matrix
@@ -100,7 +100,7 @@ function predictor(model::KernelPerceptron{T},
       y[i] = s
    end
    y   = sign.(y)
-   y[y .== -1]  = 0 # fix in the future outside this function!!
+   y[y .== -1]  .= 0 # fix in the future outside this function!!
    return y
 
 end

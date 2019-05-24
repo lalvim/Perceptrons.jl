@@ -1,6 +1,7 @@
 # use in linear perceptron
 @inline   h(Θ,x) = sinal(Θ'*x)
 
+import Random
 
 function trainer(model::LinearPerceptron{T},
 	              X::AbstractArray{T},
@@ -11,7 +12,7 @@ function trainer(model::LinearPerceptron{T},
    max_epochs    = model.max_epochs
 
    if random_state!=-1
-      srand(random_state)
+      Random.seed!(random_state)
    end
 
    n,m         = size(X)
@@ -19,7 +20,7 @@ function trainer(model::LinearPerceptron{T},
    history     = []
    nerrors,nlast_errors = Inf,0
    epochs      = 0
-   Θ           = rand(m+1)   #  already with bias
+   Θ           = Random.rand(m+1)   #  already with bias
    α           = model.α   #  learning rate
    while  nerrors>0 && epochs < max_epochs
    # stops when error is equal to zero or grater than last_error or reached max iterations

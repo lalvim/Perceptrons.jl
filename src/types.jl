@@ -2,7 +2,7 @@
 const MODEL_FILENAME = "perceptron_model.jld" # jld filename for storing the model
 const MODEL_ID       = "perceptron_model"     # if od the model in the filesystem jld data
 
-using Statistics 
+using Statistics
 
 #### An abstract perceptron model
 abstract type PerceptronModel{T} end
@@ -30,14 +30,14 @@ function LinearPerceptron(X::AbstractArray{T},
                           centralize) where T<:AbstractFloat
 
    return LinearPerceptron(alpha, # I will refactor to a constructor. Cleaner
-                           Vector{T}(1),
+                           Vector{T}(undef,1),
                            shuffle_epoch,
                            random_state,
                            max_epochs,
                            0,
-                           Vector{Integer}(1),
-                           mean(X,1),
-                           std(X,1),
+                           Vector{Integer}(undef,1),
+                           mean(X,dims=1),
+                           std(X,dims=1),
                            centralize,
                            size(X,2))
 
@@ -76,9 +76,9 @@ function VotedPerceptron(X::AbstractArray{T},
                            random_state,
                            max_epochs,
                            0,
-                           Vector{Integer}(1),
-                           mean(X,1),
-                           std(X,1),
+                           Vector{Integer}(undef,1),
+                           mean(X,dims=1),
+                           std(X,dims=1),
                            centralize,
                            size(X,2))
 
@@ -113,15 +113,15 @@ function KernelPerceptron(X::AbstractArray{T},
    return KernelPerceptron(zeros(T,size(X,1)),
                            max_epochs,
                            0,
-                           Vector{Integer}(1),
-                           mean(X,1),
-                           std(X,1),
+                           Vector{Integer}(undef,1),
+                           mean(X,dims=1),
+                           std(X,dims=1),
                            centralize,
                            size(X,2),
                            kernel,
                            width,
-                           Vector{T}(1),
-                           Vector{T}(1))
+                           Vector{T}(undef,1),
+                           Vector{T}(undef,1))
 
 end
 
@@ -155,9 +155,9 @@ function AveragedPerceptron(X::AbstractArray{T},
                            random_state,
                            max_epochs,
                            0,
-                           Vector{Integer}(1),
-                           mean(X,1),
-                           std(X,1),
+                           Vector{Integer}(undef,1),
+                           mean(X,dims=1),
+                           std(X,dims=1),
                            centralize,
                            size(X,2))
 
@@ -169,7 +169,7 @@ end
 
 ## choosing types
 ######################################################################################################
-function Model(X::AbstractArray{T},
+function Model(X,#::AbstractArray{T},
                alpha,
                shuffle_epoch,
                random_state,
@@ -179,6 +179,7 @@ function Model(X::AbstractArray{T},
                width,
                mode) where T<:AbstractFloat
 
+      println("size",size(X))
       if mode == "linear"
          return LinearPerceptron(X,
                                  alpha,

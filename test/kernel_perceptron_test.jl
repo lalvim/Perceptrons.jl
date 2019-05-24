@@ -103,6 +103,10 @@ end
     X = [1.0 1.0; 0.0 1.0; 1.0 0.0; 0.0 0.0]
     Y = [1.0 ; -1; 0.0; 0.0]
 
-    try model = Perceptrons.fit(X,Y,mode="kernel",kernel="rbf",width=1.0) catch @test true end
+    try
+        model = Perceptrons.fit(X,Y,mode="kernel",kernel="rbf",width=1.0)
+    catch
+        @test true
+    end
 
 end
