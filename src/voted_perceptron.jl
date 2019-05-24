@@ -1,4 +1,4 @@
-
+import Random
 
 
 @inline function vote(Θ,x,c,k)
@@ -19,7 +19,7 @@ function trainer(model::VotedPerceptron{T},
    max_epochs    = model.max_epochs
 
    if random_state!=-1
-      srand(random_state)
+      Random.seed!(random_state)
    end
 
    n,m         = size(X)
@@ -27,13 +27,13 @@ function trainer(model::VotedPerceptron{T},
    history     = []
    nerrors,nlast_errors = Inf,0
    epochs      = 0
-   k,Θ,c,α     = 1,Dict(1=>rand(m+1)),Dict(1=>0),model.α
+   k,Θ,c,α     = 1,Dict(1=>Random.rand(m+1)),Dict(1=>0),model.α
    #while  nerrors>0 && epochs < max_epochs
    while  epochs < max_epochs
    # stops when error is equal to zero or grater than last_error or reached max iterations
        # shuffle dataset
        if shuffle_epoch
-          sind = shuffle(1:n)
+          sind = Random.shuffle(1:n)
           x = X[sind,:]
           y = Y[sind]
        end
