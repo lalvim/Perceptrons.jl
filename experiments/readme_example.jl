@@ -34,7 +34,7 @@ println("[Kernel Perceptron] accuracy : $(acc(Y_train,Y_pred))")
 
 
 # if you want to save your model
-Perceptrons.save(model,filename="/tmp/perceptron_model.jld")
+Perceptrons.save(model,filename=joinpath(homedir(),"perceptron_model.jld"))
 
 # if you want to load back your model
-model = Perceptrons.load(filename="/tmp/perceptron_model.jld")
+model = Perceptrons.load(filename=joinpath(homedir(),"perceptron_model.jld"))
