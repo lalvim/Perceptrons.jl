@@ -1,4 +1,3 @@
-#reload("Perceptrons")
 using Perceptrons
 using Test
 
