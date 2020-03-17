@@ -3,7 +3,7 @@ uuid = "933afed5-ab4b-5649-acc9-3edb4be3c343"
 keywords = ["perceptrons", "machine learning", "artificial intelligence", "neural networks"]
 license = "MIT"
 desc = "A package with several types of Perceptron classifiers."
-version = "1.1.0"
+version = "1.1.2"
 
 [deps]
 JLD = "4138dd39-2aa7-5051-a626-17a0bb65d9c8"
